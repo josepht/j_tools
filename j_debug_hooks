@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <unit> [hook [hook] ...]"
+	exit 1
+fi
+
+. $(dirname $0)/.j_rc
+
+shift 1
+HOOKS=$@
+
+if [ -n "$UNIT" ]; then
+	juju debug-hooks ${PREFIX}$UNIT $HOOKS
+fi

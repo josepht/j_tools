@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <unit-name>[/<unit-number>] [command]"
+	exit 1
+fi
+. $(dirname $0)/.j_rc
+
+if [ -n "$UNIT" ]; then
+	shift
+	juju ssh ${PREFIX}$UNIT $@
+fi

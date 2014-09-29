@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <unit>"
+	exit 1
+fi
+
+. $(dirname $0)/.j_rc
+
+shift 1
+HOOKS=$@
+
+if [ -n "$UNIT" ]; then
+	juju resolved --retry ${PREFIX}$UNIT $HOOKS
+fi

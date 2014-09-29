@@ -1,0 +1,16 @@
+PREFIX=${PREFIX:-""}
+UNIT=$1
+SERVICE=$1
+
+# allow unit numbers to be optional, the default is 0
+case $UNIT in 
+	*[0-9])
+		UNIT_NUM="${UNIT##*/}"
+		SERVICE="${UNIT%%/*}"
+		;;
+	*)
+		SERVICE="$UNIT"
+		UNIT="$UNIT/0"
+		UNIT_NUM=0
+		;;
+esac

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+TICKET_ID=$1
+END_POINT=${END_POINT:="ticket"}
+
+#echo "DEBUG: END_POINT: $END_POINT"
+
+if [ -n "$TICKET_ID" ]; then
+	URL_SUFFIX="$TICKET_ID/"
+fi
+
+if [ -z "$JUJU_ENV" ]; then
+	echo "You need to have your juju environment setup first."
+	exit 1
+fi
+
+WEBUI_HOST=$(juju status ci-airline-webui-apache/0 |
+	grep public-address | sed 's/.*public-address: //' | sort -u | tail -1)
+#echo "DEBUG: WEBUI_HOST: '$WEBUI_HOST'"
+
+CMD="curl -s http://$WEBUI_HOST/api/v1/$END_POINT/$URL_SUFFIX | python -m json.tool"
+#echo "DEBUG: CMD: $CMD"
+eval $CMD

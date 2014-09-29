@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <service>"
+	exit 1
+fi
+
+. $(dirname $0)/.j_rc
+
+if [ -n "$SERVICE" ]; then
+	juju destroy-service ${PREFIX}$SERVICE
+fi

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. $(dirname $0)/.j_rc
+
+if [ -n "$1" -a -n "$UNIT" ]; then
+	juju status ${PREFIX}$UNIT
+else
+	juju status
+fi

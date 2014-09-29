@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+import logging
+import os
+import subprocess
+import sys
+import yaml
+
+ENV=os.environ.get('JUJU_ENV', 'local')
+CMD = "bash -c '. ~/.bash_local; set_cloud {}; juju status'".format(ENV)
+
+logging.basicConfig(level=logging.WARN)
+
+
+def parse_data(data):
+    relations = []
+    units = []
+    not_started = []
+    services = []
+    machines = []
+
+    for machine in data['machines'].values():
+        machines.append(machine)
+
+    for service in data['services'].values():
+        services.append(service)
+        logging.debug("service: %s", service)
+        if 'relations' in service:
+            for relation in service['relations'].values():
+                relations.append(relation)
+        if 'units' in service:
+            for unit, unit_data in service['units'].items():
+                logging.debug("unit: %s", unit_data)
+                if unit_data['agent-state'] != "started":
+                    not_started.append(unit)
+                units.append(unit)
+
+    return dict(
+        relations=relations,
+        units=units,
+        not_started=not_started,
+        services=services,
+        machines=machines,
+    )
+
+
+def main():
+    output = subprocess.check_output(CMD, shell=True)
+    logging.debug("output: %s", output)
+    data = yaml.load(output)
+
+    logging.debug("data: %s", data)
+
+    data = parse_data(data)
+
+    print("machine count: {}".format(len(data['machines'])))
+    print("unit count: {}".format(len(data['units'])))
+    print("service count: {}".format(len(data['services'])))
+    print("relation count: {}".format(len(data['relations'])))
+
+    if len(data['not_started']) > 0:
+        print("Units not fully started: {}".format(len(data['not_started'])))
+    for unit in data['not_started']:
+        print("  {}".format(unit))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+TICKET=$1
+CMD="j_check_ticket $TICKET | grep -E '\"(status|current_workflow_step|id)'"
+
+watch -n 15 "$CMD"

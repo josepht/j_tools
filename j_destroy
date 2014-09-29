@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -z "$JUJU_ENV" ]; then
+	echo "JUJU_ENV doesnt' appear to be set, quitting"
+	exit 1
+fi
+
+juju destroy-environment --force -y $JUJU_ENV
+
+if [ "$1" != "-o" ]; then
+	echo "bootstrapping ..."
+	juju bootstrap
+fi
