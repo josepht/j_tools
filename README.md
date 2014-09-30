@@ -1,39 +1,53 @@
 # Juju Tools
 
+## Description
+
 Some tools to make using juju a bit easier.
 
-# Notes
+## Notes
 
-## PREFIX
-For the uci-engine project all service and unit names are prefixed with 'ci-airline-' to avoid having to type this constantly j_tools uses the environment varialble PREFIX to include a common prefix for service and unit names.
+1. **PREFIX**
 
-## Service or unit
-Most j_tools commands accept a service name or unit name.  If a unit name is required for the underlying juju command, eg. `juju retry ci-airline-ts-django/0` the default unit number is '0' so you can just use the service name like this `j_retry ts-django`.
+   For the uci-engine project all service and unit names are prefixed with 'ci-airline-' to avoid having to type this constantly j_tools uses the environment varialble PREFIX to include a common prefix for service and unit names.
 
-# Examples
+2. **Service or unit**
 
-1. To deploy a project.  Currently this is hardcoded to the uci-engine project.
+   Most j_tools commands accept a service name or unit name.  If a unit name is required for the underlying juju command, eg. `juju retry ci-airline-ts-django/0` the default unit number is '0' so you can just use the service name like this `j_retry ts-django`.
 
-`j_deploy` # requires a bootstrapped environment
+## Examples
 
-2. To check the status of a deployment.
+Most commands require a bootstrapped juju environment.
 
-`j_status` or `j_status ts-django` or `j_status ts-django/1`
+* To deploy a project.  Currently this is hardcoded to the uci-engine project.
 
-3. To check the overall deployment to see if something has failed.
+  `j_deploy`
 
-`j_check`
+* To check the status of a deployment.
 
-4. To ssh to a unit
+  `j_status` or `j_status ts-django` or `j_status ts-django/1`
 
-`j_ssh ts-django`
+* To check the overall deployment to see if something has failed.
 
-5. To destroy the environment and re-bootstrap.
+  `j_check`
 
-`j_destroy`
+* To ssh to a unit
 
-or to prevent the bootstrap phase
+  `j_ssh ts-django`
 
-`j_destroy -o`
+* To enter a debug hooks tmux session
 
-6. There are other less commonly used commands like `j_watch` and `j_add_ticket`.
+  `j_debug_hooks ts-django install`
+
+* To grab a unit's juju log file
+
+  `j_log ts-django`
+
+* To destroy the environment and re-bootstrap.
+
+  `j_destroy`
+
+  or to prevent the bootstrap phase
+
+  `j_destroy -o`
+
+* There are other less commonly used commands like `j_watch_ticket` and `j_add_ticket`.
